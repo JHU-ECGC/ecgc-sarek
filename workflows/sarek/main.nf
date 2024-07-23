@@ -78,6 +78,9 @@ include { VCF_QC_BCFTOOLS_VCFTOOLS                    } from '../../subworkflows
 // Annotation
 include { VCF_ANNOTATE_ALL                            } from '../../subworkflows/local/vcf_annotate_all/main'
 
+// ECGC: convert vcf to maf 
+include { VCF_TO_MAF                                 } from '../../subworkflows/local/vcf_to_maf/main'
+
 // MULTIQC
 include { MULTIQC                                     } from '../../modules/nf-core/multiqc/main'
 
@@ -853,7 +856,21 @@ workflow SAREK {
             versions = versions.mix(VCF_ANNOTATE_ALL.out.versions)
             reports = reports.mix(VCF_ANNOTATE_ALL.out.reports)
         }
+
     }
+
+
+     //ECGC trying to plug in here
+    vcf_to_convert = Channel.empty()
+    vcf_to_convert = vcf_to_convert.mix(BAM_VARIANT_CALLING_GERMLINE_ALL.out.vcf_strelka)
+    vcf_to_convert = vcf_to_convert.mix(BAM_VARIANT_CALLING_TUMOR_ONLY_ALL.out.vcf_all)
+    vcf_to_convert = vcf_to_convert.mix(BAM_VARIANT_CALLING_SOMATIC_ALL.out.vcf_all)
+    vep_fasta = (params.vep_include_fasta) ? fasta : [[id: 'null'], []]
+    VCF_TO_MAF(
+            vcf_to_convert,
+            vep_fasta,
+            vep_cache)
+    versions = versions.mix(VCF_TO_MAF.out.versions)
 
     //
     // Collate and save software versions
