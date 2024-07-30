@@ -860,16 +860,10 @@ workflow SAREK {
     }
 
 
-     //ECGC trying to plug in here
+    //ECGC trying to plug in here
     vcf_to_convert = Channel.empty()
-    vcf_to_convert = vcf_to_convert.mix(BAM_VARIANT_CALLING_GERMLINE_ALL.out.vcf_strelka)
-    vcf_to_convert = vcf_to_convert.mix(BAM_VARIANT_CALLING_TUMOR_ONLY_ALL.out.vcf_all)
-    vcf_to_convert = vcf_to_convert.mix(BAM_VARIANT_CALLING_SOMATIC_ALL.out.vcf_all)
-    vep_fasta = (params.vep_include_fasta) ? fasta : [[id: 'null'], []]
-    VCF_TO_MAF(
-            vcf_to_convert,
-            vep_fasta,
-            vep_cache)
+    vcf_to_convert = VCF_ANNOTATE_ALL.out.vcf_ann.map{tuple (it[0], it[1])}
+    VCF_TO_MAF( vcf_to_convert )
     versions = versions.mix(VCF_TO_MAF.out.versions)
 
     //

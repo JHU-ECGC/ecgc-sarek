@@ -8,14 +8,12 @@ workflow VCF_TO_MAF {
     //copypaste from VCF_ANNOTATE_ENSEMBLVEP
     take:
     ch_vcf                      // channel: [ val(meta), path(vcf), [path(custom_file1), path(custom_file2)... (optionnal)]]
-    ch_fasta                    // channel: [ val(meta2), path(fasta) ] (optional)
-    ch_cache                    // channel: [ val(meta3), path(cache) ] (optional)
 
     main:
     VCF2MAF(
         ch_vcf,
-        ch_fasta,
-        ch_cache
+        Channel.empty(),
+        Channel.empty()
     )
 
     emit:
