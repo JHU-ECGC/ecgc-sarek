@@ -862,7 +862,7 @@ workflow SAREK {
 
     //ECGC trying to plug in here - convert all vcfs to maf with --inhibit-vep
     vep_fasta = (params.vep_include_fasta) ? fasta : [[id: 'null'], []]
-    vcf_to_convert = VCF_ANNOTATE_ENSEMBLVEP.out.vcf_tbi.map{tuple (it[0], it[1])}
+    vcf_to_convert = VCF_ANNOTATE_ALL.out.vcf_tbi.map{tuple (it[0], it[1])}
     VCF_TO_MAF( vcf_to_convert, vep_fasta )
 
     //
