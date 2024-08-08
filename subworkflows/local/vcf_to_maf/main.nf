@@ -5,14 +5,14 @@
 include { VCF2MAF } from '../../../modules/nf-core/vcf2maf/main'
 
 workflow VCF_TO_MAF {
-    //copypaste from VCF_ANNOTATE_ENSEMBLVEP
     take:
     ch_vcf                      // channel: [ val(meta), path(vcf), [path(custom_file1), path(custom_file2)... (optionnal)]]
+    fasta                       // channel: [ val(meta2), path(fasta) ] (optional)
 
     main:
     VCF2MAF(
         ch_vcf,
-        Channel.empty(),
+        fasta,
         Channel.empty()
     )
 
