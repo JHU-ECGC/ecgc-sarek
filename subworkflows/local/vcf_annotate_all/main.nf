@@ -67,7 +67,7 @@ workflow VCF_ANNOTATE_ALL {
     }
 
     //ECGC plugging in vcf2maf
-    if (tools.split(',').contains('vcf2maf') && tools.split(',').contains('vep')) {
+    if (!tools.split(',').contains('snpeff') && tools.split(',').contains('vep')) {
         vcf_for_vcf2maf = VCF_ANNOTATE_ENSEMBLVEP.out.vcf_ann.map{ meta, vcf -> [ meta, vcf ] }
         VCF_TO_MAF(vcf_for_vcf2maf, fasta, vep_cache)
 
