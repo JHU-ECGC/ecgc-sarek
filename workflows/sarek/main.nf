@@ -78,9 +78,6 @@ include { VCF_QC_BCFTOOLS_VCFTOOLS                    } from '../../subworkflows
 // Annotation
 include { VCF_ANNOTATE_ALL                            } from '../../subworkflows/local/vcf_annotate_all/main'
 
-// ECGC: convert vcf to maf 
-include { VCF_TO_MAF                                 } from '../../subworkflows/local/vcf_to_maf/main'
-
 // MULTIQC
 include { MULTIQC                                     } from '../../modules/nf-core/multiqc/main'
 
