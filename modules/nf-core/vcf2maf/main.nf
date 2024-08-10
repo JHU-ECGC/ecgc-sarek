@@ -15,7 +15,6 @@ process VCF2MAF {
     //path vep_cache             // Required for VEP running. A default of /.vep is supplied.
     tuple val(meta), path(vcf)
     tuple val(meta2), path(fasta)
-    path(vep_cache)
 
     output:
     tuple val(meta), path("*.maf"), emit: maf

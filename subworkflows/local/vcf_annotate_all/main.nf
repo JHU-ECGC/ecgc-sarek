@@ -74,6 +74,7 @@ workflow VCF_ANNOTATE_ALL {
         VCF_TO_MAF(vcf_for_vcf2maf, fasta)
 
         vcf_ann = vcf_ann.mix(VCF_TO_MAF.out.maf)
+        versions = versions.mix(VCF_TO_MAF.out.versions)
     }
 
     emit:
