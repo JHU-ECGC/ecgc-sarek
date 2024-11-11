@@ -7,6 +7,7 @@ include { VCF_ANNOTATE_ENSEMBLVEP                       } from '../../nf-core/vc
 include { VCF_ANNOTATE_ENSEMBLVEP as VCF_ANNOTATE_MERGE } from '../../nf-core/vcf_annotate_ensemblvep/main'
 include { VCF_ANNOTATE_SNPEFF                           } from '../../nf-core/vcf_annotate_snpeff/main'
 
+//ECGC
 include { VCF_TO_MAF                                   } from '../vcf_to_maf/main'
 
 workflow VCF_ANNOTATE_ALL {
@@ -69,9 +70,13 @@ workflow VCF_ANNOTATE_ALL {
     }
 
     //ECGC plugging in vcf2maf
-    if (!tools.split(',').contains('snpeff') && tools.split(',').contains('vep')) {
-        vcf_for_vcf2maf = VCF_ANNOTATE_ENSEMBLVEP.out.vcf_tbi.map{ meta, vcf -> [ meta, vcf ] }
+    if (!tools.split(',').contains('snpeff') && tools.split(',').contains('haplotypecaller')) {
         
+        //vcf_for_vcf2maf = VCF_ANNOTATE_ENSEMBLVEP.out.vcf_tbi.map{ tuple( it[0], it[1] ) }
+        //vcf_for_vcf2maf.view()
+        vcf_for_vcf2maf = vcf.map{ meta, vcf -> [ meta, vcf] }
+        vcf_for_vcf2maf.view()
+
         VCF_TO_MAF(vcf_for_vcf2maf, fasta, vep_cache)
 
         vcf_ann = vcf_ann.mix(VCF_TO_MAF.out.maf)
